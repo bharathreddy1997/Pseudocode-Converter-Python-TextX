@@ -1,0 +1,260 @@
+Rule_pseudocode:
+    instruction *= Instruction    
+;
+
+Instruction:
+    Basic_instructions | If_instruction | For_instruction | While_instruction | Function_instruction
+;
+
+Basic_instructions:
+    Declare | Print | Operators | Calculation
+;
+
+Calculation:
+    Calculation_simple 
+;
+
+While_instruction:
+    While_instruction_startline | instruction_else | While_instruction_endline
+;
+
+While_instruction_startline:
+    'while'
+    variable_be = Variable_be
+    (comparasion = Comparasion)?
+    variable_af = Variable_af
+    'do'
+;
+
+
+While_instruction_endline:
+    'end while'
+;
+
+
+
+If_instruction:
+    If_instruction_startline | If_instruction_elifline | instruction_else | If_instruction_endline
+;
+
+If_instruction_startline:
+    'if' 
+    variable_be = Variable_be 
+    (comparasion = Comparasion)?
+    (logic_operator = Logic_operator)? 
+    variable_af = Variable_af
+     
+    'then'
+;
+
+If_instruction_elifline:
+    'else if' 
+    variable_be = Variable_be 
+    (comparasion = Comparasion)?
+    (logic_operator = Logic_operator)? 
+    variable_af = Variable_af
+     
+    'then'
+; 
+
+instruction_else:
+    'else' /\s*/ 
+;
+
+If_instruction_endline:
+    'end if' /\n*/
+;
+
+For_instruction:
+    For_instruction_startline_1 |For_instruction_startline_2| For_instruction_endline
+;
+
+For_instruction_startline_1:
+    'for'
+    variable_main = Variable_main
+    'in'
+    variable_list = Variable_list
+    'do'
+;
+For_instruction_startline_2:
+    'for'
+    variable_main = Variable_main
+    'in range'
+    variable_range = Variable_range
+    'do'
+;
+
+For_instruction_endline:
+    'end for'/\n*/
+;
+
+Function_instruction:
+    Function_instruction_startline_1 | Function_instruction_startline_2 | Function_instruction_return
+    | Function_instruction_endline | Function_instruction_call_1 | Function_instruction_call_2
+    | Function_instruction_declare_1 | Function_instruction_declare_2
+;
+
+Function_instruction_startline_1:
+    'function'
+    function_name = Function_name
+    'with'
+    function_variables += Function_variables[',']
+    'is'
+;
+
+Function_instruction_startline_2:
+    'function'
+    function_name = Function_name
+    'is'
+;
+
+Function_instruction_return:
+    'return' return_variable = Return_variable
+;
+
+Function_instruction_endline:
+    'end function'/\n*/
+;
+
+Function_instruction_call_1:
+    'call' 
+    function_name = Function_name
+    'with'
+    function_variables += Function_variables[',']
+;
+
+Function_instruction_call_2:
+    'call'
+    function_name = Function_name
+;
+
+Function_instruction_declare_1:
+    variable = Variable /\s*/ 'result' /\s*/
+    function_name = Function_name
+    'with'
+    function_variables += Function_variables[',']
+;
+
+Function_instruction_declare_2:
+    variable = Variable /\s*/ 'result' /\s*/
+    function_name = Function_name
+;
+
+Function_name:
+    fun_name = ID
+;
+
+Function_variables:
+    fun_var = ID //| fun_var = INT
+;
+
+Return_variable:
+    return_var = ID | return_var = INT
+;
+
+Declare:
+    Declare_variable | Input_variable | Declare_value | Declare_list | Input_list
+;
+
+Declare_variable:
+    'declare' /\s*/ variable = Variable /\n*/
+;
+
+Input_variable:
+    'input' /\s*/ variable = Variable /\n*/
+;
+
+Declare_value:
+    variable = Variable /\s*/ 'equal' /\s*/ value = Value /\n*/
+;
+
+Declare_list:
+    'list' /\s*/ variable = Variable 
+;
+
+Input_list:
+    'put in list' /\s*/ variable = Variable /\s*/ ':' 
+    list_variables += List_variables[',']
+    /\n*/
+;
+
+List_variables:
+    list_var = ID
+;
+
+Variable:
+    var = ID
+;
+
+Value:
+    val = ID | val = INT
+;
+
+
+
+Print:
+    Print_string | Print_words
+;
+
+Print_string:
+    'print' /\s*/ content_string = Content_string 
+;
+
+Print_words:
+    'print' /\s*/ content = Content
+;
+
+Content_string:
+    con = STRING /\s*/
+;
+
+Content:
+    con = ID /\s*/
+;
+
+
+Calculation_simple:
+    variable_be = Variable_be 
+    calculation_operator = Calculation_operator
+    variable_af = Variable_af
+;
+
+
+Operators:
+    Comparasion | Calculation_operator | Logic_operator
+;
+
+Comparasion:
+    'is greater than' | 'is lower than' | 'is more equal' | 'is less euqal' | 'is equal to' | 'is different from' 
+;
+
+Calculation_operator:
+    'plus' | 'minus' | 'multiply' | 'divide' | 'power'
+;
+
+Logic_operator:
+    'and' | 'or' | 'not'
+;
+
+Variable_be:
+    var_be = ID
+;
+Variable_af:
+    var_af = ID
+;
+Variable_main:
+    var_main = ID
+;
+Variable_list:
+    var_list = ID
+;
+Variable_range:
+    var_range = INT
+; 
+Variable_value:
+    var_value = ID
+;
+
+Comment:
+  /\/\/.*$/
+;
